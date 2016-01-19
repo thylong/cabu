@@ -1,0 +1,22 @@
+venv/
+build/
+.tox
+*.cache
+*.DS_STORE
+.pre-commit-config.yaml
+*.log
+*.pyc
+*.png
+sandbox/
+.coverage
+
+# Setuptools distribution folder.
+/dist/
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
+
+# Not yet ready to release
+*plugins/
+
+# Sphinx
+*_build/

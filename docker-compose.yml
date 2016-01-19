@@ -1,0 +1,23 @@
+mongo:
+    image: mongo:2.6.11
+bucket:
+    image: lphoward/fake-s3
+    ports:
+        - "4569:4569"
+ftp:
+    build: cabu/tests/docker_deps/ftp
+    ports:
+        - "21:21"
+        - "30000-30009:30000-30009"
+    environment:
+        - PUBLICHOST=0.0.0.0
+cabu:
+    build: .
+    ports:
+        - "80:8080"
+    volumes:
+        - .:/usr/src/app
+    links:
+        - mongo
+        - bucket
+        - ftp

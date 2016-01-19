@@ -1,0 +1,11 @@
+flake8
+pytest
+pytest-cov
+mock
+tox
+Sphinx
+docutils
+testtools
+wheel
+requests-mock
+flask-PyMongo

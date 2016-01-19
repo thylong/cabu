@@ -1,0 +1,5 @@
+[run]
+omit =
+    cabu/tests/*
+    cabu/default_settings.py
+    cabu/utils/bucket.py

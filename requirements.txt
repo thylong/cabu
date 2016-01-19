@@ -1,0 +1,8 @@
+beautifulsoup4==4.4.1
+requests==2.9.1
+selenium==2.50.0
+xvfbwrapper==0.2.7
+Flask==0.10.1
+requests-aws==0.1.8
+six==1.10.0
+ftpretty==0.2.3
