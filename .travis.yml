@@ -1,0 +1,27 @@
+language: python
+cache: pip
+
+python:
+  - '2.7'
+  - '3.3'
+  - '3.4'
+  - '3.5'
+  - 'pypy'
+services:
+  - mongodb
+install:
+  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
+script: py.test --cov-report term-missing --cov-config .coveragerc --cov=cabu cabu
+
+deploy:
+  provider: pypi
+  user: thylong
+  password:
+    secure: "bVxLVALTeEgiOmn14vglPO0Ce6T97ssYNFgc7+RuFZiY5jd4LS8FSrE/F7i3nj3I/LCxaTisa0ab/qHOh5cFbVHNP0HVXcL4/kAOG+Ie/cO6YbA35oWp0NZ+WoV/4P37792qW1W+I+Gtle2hhdY/3kMpkFOBwl5UQ4GF3xqyPoXvRh7nBN5HypvMRGm2tRO+C7roR3l4zM6aGcKp65urlCxT1aPjmWmxpUFwrsJ4rpzhNrtHFWC/asUC0d+z674SYIg2MKqMm7tdfLRQxv1JPtjgYNolcazV5WcnyMOrH80By+W8VdUimHRWo6+8cME7Peo7bX2P/jodueHzPR1FbcSuh49vyH73ebSZCeLMD3hNa6CFO+l1r6265z+cOaUxWD5FlNgo/D6jYdqGIW+km57itL59cN9cxTueWOh20uNIbQsFFsiDVVnPshF0mIQ3ARoXGsEf+sYAFXvPFRyBKElHh404E6xdghSPvc2w/mNIdW83dxvmuIxfryaoyEN7Y1Hi7f4KHxGBb27e6lSxiOMx2lh+JEIF7jS2wFgH4zx0pgZCfYQbJbffxKcFvF2dyEuVmbKqHTP6B76Ekt/iovB4PC+fkTxtLMXmJuvZjk+O9TowNfLqMpc3ZK0UkoAGYYGsCXexvO5iBVOS4Zwew+vZHNgaBDahD5qclVujaW4="
+  on:
+    tags: true
+    branch: master
+    python: '3.5'
+after_success:
+  coveralls
