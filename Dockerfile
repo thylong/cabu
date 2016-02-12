@@ -35,4 +35,4 @@ WORKDIR /usr/src/app
 RUN pip install flask-pymongo
 RUN pip install -r requirements-dev.txt
 
-CMD ["python", "watcher.py"]
+CMD ["python", "dev_server.py"]

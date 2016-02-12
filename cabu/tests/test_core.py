@@ -7,16 +7,20 @@ from cabu.tests.test_base import TestBase
 from cabu.exceptions import ConfigurationException
 from cabu import Cabu
 
-from mock import patch, MagicMock
+from mock import patch
 
 
 class TestCore(TestBase):
     def setUp(self):
+        self.patcher_load_phantomjs = patch('cabu.drivers.load_phantomjs', spec=True)
+        self.patcher_load_phantomjs.start()
         if 'CABU_SETTINGS' in os.environ:
             del os.environ['CABU_SETTINGS']
 
-    @patch('cabu.drivers.load_phantomjs', return_value=MagicMock())
-    def test_cabu_default(self, mock_driver):
+    def tearDown(self):
+        self.patcher_load_phantomjs.stop()
+
+    def test_cabu_default(self):
         cabu = Cabu(__name__)
         self.assertIsInstance(cabu, Cabu)
         self.assertEquals(cabu.config['DRIVER_NAME'], 'PhantomJS')
@@ -27,8 +31,7 @@ class TestCore(TestBase):
         self.assertEquals(cabu.config['HEADLESS'], True)
         del cabu
 
-    @patch('cabu.drivers.load_phantomjs', return_value=MagicMock())
-    def test_cabu_test_boolean_var_env(self, mock_driver):
+    def test_cabu_test_boolean_var_env(self):
         os.environ['CABU_TEST'] = 'True'
         cabu = Cabu(__name__)
         self.assertEquals(cabu.config['CABU_TEST'], True)
@@ -39,8 +42,7 @@ class TestCore(TestBase):
         self.assertEquals(cabu.config['CABU_TEST'], False)
         del cabu
 
-    @patch('cabu.drivers.load_phantomjs', return_value=MagicMock())
-    def test_cabu_custom(self, mock_driver):
+    def test_cabu_custom(self):
         os.environ['CABU_SETTINGS'] = 'cabu.tests.fixtures.custom_settings'
         cabu = Cabu(__name__)
         self.assertIsInstance(cabu, Cabu)
@@ -52,14 +54,12 @@ class TestCore(TestBase):
         self.assertEquals(cabu.config['HEADLESS'], True)
         del cabu
 
-    @patch('cabu.drivers.load_phantomjs', return_value=MagicMock())
-    def test_cabu_load_with_db(self, mock_driver):
+    def test_cabu_load_with_db(self):
         cabu = Cabu(__name__, db=PyMongo)
         self.assertIsInstance(cabu.db, Database)
         del cabu
 
-    @patch('cabu.drivers.load_phantomjs', return_value=MagicMock())
-    def test_cabu_load_with_unrecognized_db(self, mock_driver):
+    def test_cabu_load_with_unrecognized_db(self):
         with self.assertRaises(ConfigurationException):
             cabu = Cabu(__name__, db=os)
             del cabu
