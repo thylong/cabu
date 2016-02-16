@@ -22,5 +22,6 @@ S3_SECRET_KEY = None
 
 SERVER_X = False
 HEADLESS = True  # Run the Browser in Xvfd
+HEADERS = None
 
 IO_CONCURRENCY = False  # If True, Python version should be superior or equal to py34

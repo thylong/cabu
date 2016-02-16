@@ -1,5 +1,6 @@
 [run]
 omit =
     cabu/tests/*
+    cabu/plugins/*
     cabu/default_settings.py
     cabu/utils/bucket.py

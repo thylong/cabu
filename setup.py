@@ -13,7 +13,7 @@ setup(
     install_requires=[
         'requests',
         'beautifulsoup4>=2.9.1',
-        'selenium>=2.50.0,<2.51.0',
+        'selenium>=2.50.0,<2.52.0',
         'xvfbwrapper>=0.2.7,<0.2.8',
         'flask>=0.10.1,<0.11.0',
         'six>=0.1.8',

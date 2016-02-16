@@ -12,13 +12,18 @@ from mock import patch, MagicMock
 class TestBase(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(TestBase, self).__init__(*args, **kwargs)
+
         self.patcher_xvfb = patch('cabu.drivers.Xvfb', spec=True)
         self.patcher_xvfb.start()
+        self.patcher_ftpretty = patch('cabu.core.ftpretty', spec=True)
+        self.patcher_ftpretty.start()
 
     def __del__(self, *args, **kwargs):
+        self.patcher_ftpretty.stop()
         self.patcher_xvfb.stop()
 
     def __exit__(self, *args, **kwargs):
+        self.patcher_ftpretty.stop()
         self.patcher_xvfb.stop()
         super(TestBase, self).__exit__(*args, **kwargs)
 
@@ -30,7 +35,6 @@ class TestBase(unittest.TestCase):
         self.app = Cabu(__name__)
         self.config = self.app.config
         self.vdisplay = self.app.vdisplay
-        self.ftp = self.app.ftp
         self.client = self.app.test_client()
 
     def tearDown(self):

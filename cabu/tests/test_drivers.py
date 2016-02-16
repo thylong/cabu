@@ -36,15 +36,24 @@ class TestDrivers(TestBase):
     def test_load_firefox(self, mock_driver):
         self.config['DRIVER_NAME'] = 'Firefox'
         driver = load_driver(self.config)
-        mock_driver.assert_called_once_with(
-            firefox_binary=None, firefox_profile=None
-        )
         driver.close()
 
     @patch('cabu.drivers.webdriver.Firefox', return_value=MagicMock())
     def test_load_firefox_with_binary(self, mock_driver):
         self.config['DRIVER_NAME'] = 'Firefox'
         self.config['DRIVER_BINARY_PATH'] = 'firefox'
+        driver = load_driver(self.config)
+        driver.close()
+
+    @patch('cabu.drivers.webdriver.Firefox', return_value=MagicMock())
+    def test_load_firefox_with_headers(self, mock_driver):
+        self.config['DRIVER_NAME'] = 'Firefox'
+        self.config['HEADERS'] = {
+            'User-Agent':
+                'Mozilla/7.0 (Macintosh; Intel Mac OS X 10_11_3) Apple'
+                'WebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.10'
+                '3 Safari/537.36'
+        }
         driver = load_driver(self.config)
         driver.close()
 
@@ -56,10 +65,12 @@ class TestDrivers(TestBase):
         driver.close()
 
     @patch('cabu.drivers.webdriver.PhantomJS', return_value=MagicMock())
-    def test_load_phantomjs(self, mock_driver):
+    @patch('cabu.drivers.DesiredCapabilities', return_value='mock_dcap')
+    def test_load_phantomjs(self, mock_dcap, mock_driver):
         self.config['DRIVER_NAME'] = 'PhantomJS'
         driver = load_driver(self.config)
         mock_driver.assert_called_once_with(
+            desired_capabilities={},
             service_args=[
                 '--ignore-ssl-errors=true',
                 '--ssl-protocol=any',
@@ -67,6 +78,19 @@ class TestDrivers(TestBase):
             ],
             service_log_path='/dev/null'
         )
+        driver.close()
+
+    @patch('cabu.drivers.webdriver.PhantomJS', return_value=MagicMock())
+    @patch('cabu.drivers.DesiredCapabilities', return_value='mock_dcap')
+    def test_load_phantomjs_with_headers(self, mock_dcap, mock_driver):
+        self.config['DRIVER_NAME'] = 'PhantomJS'
+        self.config['HEADERS'] = {
+            'User-Agent':
+                'Mozilla/7.0 (Macintosh; Intel Mac OS X 10_11_3) Apple'
+                'WebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.10'
+                '3 Safari/537.36'
+        }
+        driver = load_driver(self.config)
         driver.close()
 
     @patch('cabu.drivers.webdriver.Firefox', return_value=MagicMock())
@@ -84,16 +108,30 @@ class TestDrivers(TestBase):
         driver.close()
 
     @patch('cabu.drivers.webdriver.PhantomJS', return_value=MagicMock())
-    def test_load_with_phantomjs_http_proxy(self, mock_driver):
-        os.environ['HTTP_PROXY'] = 'http://127.0.0.1:80'
-        driver = load_driver(self.config)
-        driver.close()
-
-    @patch('cabu.drivers.webdriver.PhantomJS', return_value=MagicMock())
-    def test_load_with_phantomjs_https_proxy(self, mock_driver):
+    @patch('cabu.drivers.DesiredCapabilities', return_value='mock_dcap')
+    def test_load_with_phantomjs_http_proxy(self, mock_dcap, mock_driver):
         os.environ['HTTP_PROXY'] = 'http://127.0.0.1:80'
         driver = load_driver(self.config)
         mock_driver.assert_called_once_with(
+            desired_capabilities={},
+            service_args=[
+                '--ignore-ssl-errors=true',
+                '--ssl-protocol=any',
+                '--web-security=false',
+                '--proxy=127.0.0.1:80',
+                '--proxy-type=http'
+            ],
+            service_log_path='/dev/null'
+        )
+        driver.close()
+
+    @patch('cabu.drivers.webdriver.PhantomJS', return_value=MagicMock())
+    @patch('cabu.drivers.DesiredCapabilities', return_value='mock_dcap')
+    def test_load_with_phantomjs_https_proxy(self, mock_dcap, mock_driver):
+        os.environ['HTTP_PROXY'] = 'http://127.0.0.1:80'
+        driver = load_driver(self.config)
+        mock_driver.assert_called_once_with(
+            desired_capabilities={},
             service_args=[
                 '--ignore-ssl-errors=true',
                 '--ssl-protocol=any',

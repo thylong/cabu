@@ -14,7 +14,7 @@ RUN ln -s /usr/local/share/phantomjs-1.9.7-linux-x86_64/bin/phantomjs /usr/bin/p
 # RUN echo deb http://packages.linuxmint.com debian import >> /etc/apt/sources.list
 RUN apt-get update -y
 # RUN apt-get install -y --force-yes firefox
-RUN apt-get install -y xvfb
+RUN apt-get install -y xvfb iceweasel
 
 # mongopath of mongo container
 ENV DATABASE_URI mongodb://mongo/cabu
@@ -24,15 +24,10 @@ ENV S3_BUCKET test
 ENV S3_ACCESS_KEY test
 ENV S3_SECRET_KEY test
 
-# ftp conf
-ENV FTP_HOST ftp
-ENV FTP_LOGIN john
-ENV FTP_PASSWORD test
-
 WORKDIR /usr/src/app
 
 # ONLY IN PRIVATE
 RUN pip install flask-pymongo
 RUN pip install -r requirements-dev.txt
 
-CMD ["python", "watcher.py"]
+CMD ["python", "dev_server.py"]
