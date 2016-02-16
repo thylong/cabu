@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='cabu',
-    version='0.0.1',
+    version='0.0.2',
     description='cabu is a simple REST microservice to scrap content from anywhere.',
     url='http://github.com/thylong/cabu',
     author='Theotime Leveque',

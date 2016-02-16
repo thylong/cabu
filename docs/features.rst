@@ -116,3 +116,19 @@ Cabu will use the following by default.
     HTTP_PROXY = ['127.0.0.1']
     # or with HTTPS
     HTTPS_PROXY = ['127.0.0.1']
+
+Headers
+-------
+
+You can override default headers like User-Agent of your selected webdriver.
+This will override the value for all requests made with the webdriver.
+It works currently with Firefox and PhantomJS only.
+
+.. code-block:: python
+
+    HEADERS = {
+        'User-Agent':
+            'Mozilla/7.0 (Macintosh; Intel Mac OS X 10_11_3) Apple'
+            'WebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.10'
+            '3 Safari/537.36'
+    }

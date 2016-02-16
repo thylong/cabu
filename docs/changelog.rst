@@ -5,7 +5,6 @@ Changelog
 
 TODO:
 
-- Headers configuration
 - Hooks
 - CouchDB support
 - CouchBase support
@@ -17,6 +16,13 @@ TODO:
 - Performance upgrade
 - More examples
 - Neural Network plugins
+
+Version 0.0.2
+--------------
+
+- Headers configuration
+- Travis automated build + coverage
+- Refact tests
 
 Version 0.0.1
 --------------
