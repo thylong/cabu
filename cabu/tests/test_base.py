@@ -45,36 +45,6 @@ class TestBase(unittest.TestCase):
         if hasattr(self, 'app'):
             del self.app
 
-    def get(self, resource, item=None, query='', headers=[]):
-        url = self.resolve_resource(resource, item)
-        res = self.client.get(url + query, headers=headers)
-        return self.parse_response(res)
-
-    def post(self, resource, data, item=None, headers=[], content_type=None):
-        if not content_type:
-            content_type = 'application/json'
-        headers.append(('Content-Type', content_type))
-        url = self.resolve_resource(resource, item)
-        res = self.client.post(url, data=json.dumps(data), headers=headers)
-        return self.parse_response(res)
-
-    def put(self, resource, data, item=None, headers=[]):
-        headers.append(('Content-Type', 'application/json'))
-        url = self.resolve_resource(resource, item)
-        res = self.client.put(url, data=json.dumps(data), headers=headers)
-        return self.parse_response(res)
-
-    def patch(self, resource, data, item=None, headers=[]):
-        headers.append(('Content-Type', 'application/json'))
-        url = self.resolve_resource(resource, item)
-        res = self.client.patch(url, data=json.dumps(data), headers=headers)
-        return self.parse_response(res)
-
-    def delete(self, resource, item=None, headers=None):
-        url = self.resolve_resource(resource, item)
-        res = self.client.delete(url, headers=headers)
-        return self.parse_response(res)
-
     def parse_response(self, res):
         val = None
         if res.get_data():

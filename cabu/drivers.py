@@ -7,7 +7,6 @@ from xvfbwrapper import Xvfb
 from cabu.exceptions import DriverException
 from cabu.utils.headers import Headers
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium import webdriver
 
 try:
     from urllib.parse import urlsplit

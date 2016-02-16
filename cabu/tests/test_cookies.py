@@ -14,19 +14,19 @@ class TestCookiesStorage(TestBase):
         self.cookies = self.app.cookies
 
     def test_crud(self):
-        r = self.cookies.set('test', 'test')
+        r = self.cookies.set_cookie('test', 'test')
         self.assertIsInstance(r, dict)
         self.assertEqual(r['ok'], 1)
 
-        r = self.cookies.get('test')
+        r = self.cookies.get_cookie('test')
         self.assertIsInstance(r, dict)
         self.assertEqual(r['test'], 'test')
 
-        r = self.cookies.delete('test')
+        r = self.cookies.delete_cookie('test')
         self.assertEqual(r['ok'], 1)
 
     def test_clean(self):
-        self.cookies.set('test1', 'test')
-        self.cookies.set('test2', 'test')
+        self.cookies.set_cookie('test1', 'test')
+        self.cookies.set_cookie('test2', 'test')
         r = self.cookies.clean()
         self.assertEqual(r['ok'], 1)

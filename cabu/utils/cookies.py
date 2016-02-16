@@ -11,7 +11,7 @@ class CookieStorage(object):
     def __init__(self, db):
         self.db = db
 
-    def get(self, key):
+    def get_cookie(self, key):
         """Get the value of the given cookie key.
 
         Args:
@@ -23,7 +23,7 @@ class CookieStorage(object):
         # if callable(getattr(self.db, 'find')):
         return self.db.cookies.find_one({key: {'$exists': True}})
 
-    def set(self, key, value):
+    def set_cookie(self, key, value):
         """Set the value of the defined cookie key.
 
         Args:
@@ -36,7 +36,7 @@ class CookieStorage(object):
         r = self.db.cookies.replace_one({key: {'$exists': True}}, {key: value}, upsert=True)
         return r.raw_result
 
-    def delete(self, key):
+    def delete_cookie(self, key):
         """Delete the value of the given cookie key.
 
         Args:

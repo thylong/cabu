@@ -29,8 +29,8 @@ def extract_links(response_content, unique=False, blacklist_domains=[],
         links (list): A list of extracted and filtered links.
     """
 
-    if any([item in blacklist_domains for item in whitelist_domains]) \
-       or any([item in blacklist_extensions for item in whitelist_extensions]):
+    if any((item in blacklist_domains for item in whitelist_domains)) \
+       or any((item in blacklist_extensions for item in whitelist_extensions)):
         raise LinkExtractorException('blacklist_domains and whitelist_domains '
                                      'can`t contain common value(s).')
 
