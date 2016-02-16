@@ -4,6 +4,9 @@ Cabu
 .. image:: https://readthedocs.org/projects/cabu/badge/?version=latest
     :target: http://cabu.readthedocs.org/en/latest/?badge=latest
     :alt: Documentation Status
+.. image:: https://coveralls.io/repos/github/thylong/cabu/badge.svg?branch=master
+    :target: https://coveralls.io/github/thylong/cabu?branch=master
+    :alt: Coverage Status
 
 Cabu is a simple microservice framework to remotely crawl websites.
 It's built on Flask and Selenium, contains a virtual display wrapper and few methods.
