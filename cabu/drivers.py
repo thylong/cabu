@@ -5,6 +5,10 @@ import re
 from selenium import webdriver
 from xvfbwrapper import Xvfb
 from cabu.exceptions import DriverException
+from cabu.utils.headers import Headers
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium import webdriver
+
 try:
     from urllib.parse import urlsplit
 except ImportError:  # pragma: no cover
@@ -31,6 +35,15 @@ def load_vdisplay(config):
         vdisplay.start()
 
     return vdisplay
+
+
+def unload_vdisplay(vdisplay):
+    """Shutdown given Xvfb instance.
+
+    Args:
+        vdisplay (XvfbWrapper): The running virtual X server.
+    """
+    vdisplay.stop()
 
 
 def load_driver(config, vdisplay=None):
@@ -69,15 +82,6 @@ def unload_driver(driver):
     driver.quit()
 
 
-def unload_vdisplay(vdisplay):
-    """Shutdown given Xvfb instance.
-
-    Args:
-        vdisplay (XvfbWrapper): The running virtual X server.
-    """
-    vdisplay.stop()
-
-
 def load_firefox(config):
     """Start Firefox webdriver with the given configuration.
 
@@ -89,13 +93,12 @@ def load_firefox(config):
 
     """
     binary = None
-    profile = None
+    profile = webdriver.FirefoxProfile()
 
     if os.environ.get('HTTPS_PROXY') or os.environ.get('HTTP_PROXY'):
         proxy_address = os.environ.get('HTTPS_PROXY', os.environ.get('HTTP_PROXY'))
         proxy_port = re.search('\:([0-9]+)$', proxy_address).group(1)
 
-        profile = webdriver.FirefoxProfile()
         profile.set_preference('network.proxy.type', 1)
         profile.set_preference(
             'network.proxy.http',
@@ -103,6 +106,9 @@ def load_firefox(config):
         )
         profile.set_preference('network.proxy.http_port', proxy_port)
         profile.update_preferences()
+
+    if 'HEADERS' in config and config['HEADERS']:
+        profile = Headers(config).set_headers(profile)
 
     if config['DRIVER_BINARY_PATH']:
         from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
@@ -134,18 +140,24 @@ def load_phantomjs(config):
         webdriver (selenium.webdriver): An instance of phantomJS webdriver.
 
     """
+    dcap = dict(DesiredCapabilities.PHANTOMJS)
     service_args = [
         '--ignore-ssl-errors=true',
         '--ssl-protocol=any',
         '--web-security=false'
     ]
+
     if os.environ.get('HTTPS_PROXY') or os.environ.get('HTTP_PROXY'):
         proxy_address = os.environ.get('HTTPS_PROXY', os.environ.get('HTTP_PROXY'))
         proxy_ip = re.search('http\:\/\/(.*)$', proxy_address).group(1)
         service_args.append('--proxy=%s' % proxy_ip)
         service_args.append('--proxy-type=http')
 
+    if 'HEADERS' in config and config['HEADERS']:
+        dcap = Headers(config).set_headers(dcap)
+
     return webdriver.PhantomJS(
+        desired_capabilities=dcap,
         service_args=service_args,
         service_log_path=os.path.devnull
     )

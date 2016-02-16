@@ -64,7 +64,7 @@ class Cabu(Flask):
                 self.config['S3_SECRET_KEY']
             )
 
-        if self.config.get('FTP_HOST'):
+        if self.config.get('FTP_HOST'):  # pragma: no cover
             self.ftp = ftpretty(
                 self.config['FTP_HOST'],
                 self.config['FTP_LOGIN'],
@@ -75,11 +75,11 @@ class Cabu(Flask):
         self.webdriver = load_driver(self.config, self.vdisplay)
 
     def __del__(self):
-        if hasattr(self, 'ftp'):
+        if hasattr(self, 'ftp') and self.ftp:  # pragma: no cover
             self.ftp.close()
-        if hasattr(self, 'webdriver'):
+        if hasattr(self, 'webdriver') and self.webdriver:
             unload_driver(self.webdriver)
-        if hasattr(self, 'vdisplay'):
+        if hasattr(self, 'vdisplay') and self.vdisplay:
             unload_vdisplay(self.vdisplay)
 
     def __exit__(self, *args, **kwargs):  # pragma: no cover
@@ -124,7 +124,10 @@ class Cabu(Flask):
         # settings.py are overriden by Env vars.
         for key in self.config.keys():
             if key.isupper() and key in os.environ:
-                if os.environ[key] == 'True':
+                if os.environ[key][:1] == '{':
+                    import ast
+                    self.config[key] = ast.literal_eval(os.environ[key])
+                elif os.environ[key] == 'True':
                     self.config[key] = True
                 elif os.environ[key] == 'False':
                     self.config[key] = False

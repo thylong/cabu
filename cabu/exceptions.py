@@ -27,5 +27,9 @@ class CookieStorageException(Exception):
     pass
 
 
+class HeaderException(Exception):
+    pass
+
+
 class DriverException(Exception):
     pass

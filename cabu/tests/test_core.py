@@ -18,12 +18,14 @@ class TestCore(TestBase):
             del os.environ['CABU_SETTINGS']
 
     def tearDown(self):
+        if 'HEADERS' in os.environ:
+            del os.environ['HEADERS']
         self.patcher_load_phantomjs.stop()
 
     def test_cabu_default(self):
         cabu = Cabu(__name__)
         self.assertIsInstance(cabu, Cabu)
-        self.assertEquals(cabu.config['DRIVER_NAME'], 'PhantomJS')
+        self.assertEquals(cabu.config['DRIVER_NAME'], None)
         self.assertEquals(cabu.config['DRIVER_WINDOWS_WIDTH'], 1024)
         self.assertEquals(cabu.config['DRIVER_WINDOWS_HEIGHT'], 768)
         self.assertEquals(cabu.config['DRIVER_PAGE_TIMEOUT'], 30)
@@ -52,6 +54,20 @@ class TestCore(TestBase):
         self.assertEquals(cabu.config['DRIVER_PAGE_TIMEOUT'], 10)
         self.assertEquals(cabu.config['IO_CONCURRENCY'], False)
         self.assertEquals(cabu.config['HEADLESS'], True)
+        del cabu
+
+    def test_cabu_custom_with_dict_in_environ(self):
+        os.environ['CABU_SETTINGS'] = 'cabu.tests.fixtures.custom_settings'
+        os.environ['HEADERS'] = "{'abc': 1}"
+        cabu = Cabu(__name__)
+        self.assertIsInstance(cabu, Cabu)
+        self.assertEquals(cabu.config['DRIVER_NAME'], 'PhantomJS')
+        self.assertEquals(cabu.config['DRIVER_WINDOWS_WIDTH'], 800)
+        self.assertEquals(cabu.config['DRIVER_WINDOWS_HEIGHT'], 600)
+        self.assertEquals(cabu.config['DRIVER_PAGE_TIMEOUT'], 10)
+        self.assertEquals(cabu.config['IO_CONCURRENCY'], False)
+        self.assertEquals(cabu.config['HEADLESS'], True)
+        self.assertEquals(cabu.config['HEADERS'], {'abc': 1})
         del cabu
 
     def test_cabu_load_with_db(self):

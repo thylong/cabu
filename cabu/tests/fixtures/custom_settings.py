@@ -17,6 +17,11 @@ FTP_LOGIN = None
 FTP_PASSWORD = None
 
 HEADLESS = True  # Run the Browser in Xvfd
+HEADERS = {
+    'User-Agent':
+        'Mozilla/6.0 (Macintosh; Intel Mac OS X 10_11_3) Apple'
+        'WebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.103 Safari/537.36'
+}
 
 IO_CONCURRENCY = False  # If True, Python version should be superior or equal to py34
 
